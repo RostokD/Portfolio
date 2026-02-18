@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -539,18 +538,18 @@
 
         <nav>
             <ul>
-                
+
                       <li><a href="../#about-me">PROFILE</a></li>
                       <li><a href="../#skills">SKILLS</a></li>
                       <li><a href="../#portfolio">GALLERY</a></li>
-                
+
             </ul>
         </nav>
     </header>
 
-    
+
         <div class="inner-page-container">
-            
+
 <style>
     /* 1. Глобальные настройки */
     html, body {
@@ -742,7 +741,7 @@
     </section>
 </main>
         </div>
-    
+
 
     <footer>
         <div class="social-links">
@@ -766,73 +765,100 @@
 
     <script>
         const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("fullImage");
-        const closeBtn = document.querySelector(".modal-close");
-        const prevBtn = document.querySelector(".modal-prev");
-        const nextBtn = document.querySelector(".modal-next");
+    const modalImg = document.getElementById("fullImage");
+    const closeBtn = document.querySelector(".modal-close");
+    const prevBtn = document.querySelector(".modal-prev");
+    const nextBtn = document.querySelector(".modal-next");
 
-        let images = Array.from(document.querySelectorAll(".item img, .process-img"));
-        let currentIndex = 0;
-       // Переменные для отслеживания двойного тапа
-       let lastTap = 0;
+    let images = [];
+    let currentIndex = 0;
+    let touchStartX = 0;
+    let lastTap = 0;
 
-       document.addEventListener('touchend', function (e) {
-           const currentTime = new Date().getTime();
-           const tapLength = currentTime - lastTap;
+    // Функция проверки тач-устройства
+    const isTouch = () => (('ontouchstart' in window) || (navigator.maxTouchPoints > 0));
 
-           // Если интервал между нажатиями меньше 300мс — это двойной тап
-           if (tapLength < 300 && tapLength > 0) {
-               const target = e.target;
+    function openModal(target) {
+        modal.style.display = "flex";
+        images = Array.from(document.querySelectorAll(".item img, .process-img"));
+        currentIndex = images.indexOf(target);
+        updateModalImage();
 
-               // Проверяем, что нажали на картинку в галерее или в процессе
-               if (target.tagName === 'IMG' && (target.closest('.item') || target.classList.contains('process-img'))) {
-                   e.preventDefault(); // Чтобы страница не зумилась стандартно
+        // Если это тач — скрываем кнопки навигации программно
+        if (isTouch()) {
+            prevBtn.style.display = "none";
+            nextBtn.style.display = "none";
+        } else {
+            prevBtn.style.display = "block";
+            nextBtn.style.display = "block";
+        }
+    }
 
-                   modal.style.display = "flex";
-                   images = Array.from(document.querySelectorAll(".item img, .process-img"));
-                   currentIndex = images.indexOf(target);
-                   updateModalImage();
-               }
-           }
-           lastTap = currentTime;
-       });
+    function updateModalImage() {
+        if(images[currentIndex]) modalImg.src = images[currentIndex].src;
+    }
 
-        document.addEventListener('click', function(e) {
+    // ТВОЯ ЛОГИКА ТАЧА (ДАБЛ-ТАП И СВАЙП)
+    document.addEventListener('touchstart', e => {
+        touchStartX = e.changedTouches[0].screenX;
+        const currentTime = new Date().getTime();
+        const tapLength = currentTime - lastTap;
+
+        if (tapLength < 300 && tapLength > 0) {
             const target = e.target;
             if (target.tagName === 'IMG' && (target.closest('.item') || target.classList.contains('process-img'))) {
-                modal.style.display = "flex";
-                images = Array.from(document.querySelectorAll(".item img, .process-img"));
-                currentIndex = images.indexOf(target);
-                updateModalImage();
+                e.preventDefault();
+                openModal(target);
             }
-        });
-
-        function updateModalImage() {
-            if(images[currentIndex]) modalImg.src = images[currentIndex].src;
         }
+        lastTap = currentTime;
+    }, {passive: false});
 
-        nextBtn.onclick = (e) => {
-            e.stopPropagation();
-            currentIndex = (currentIndex + 1) % images.length;
-            updateModalImage();
+    document.addEventListener('touchend', e => {
+        if (modal.style.display === "flex") {
+            const touchEndX = e.changedTouches[0].screenX;
+            const distance = touchEndX - touchStartX;
+            if (distance < -50) nextBtn.onclick(e); // Свайп влево
+            if (distance > 50) prevBtn.onclick(e);  // Свайп вправо
         }
+    }, {passive: false});
 
-        prevBtn.onclick = (e) => {
-            e.stopPropagation();
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            updateModalImage();
+    // ОБЫЧНЫЙ КЛИК (РАБОТАЕТ ТОЛЬКО ЕСЛИ НЕТ ТАЧА)
+    document.addEventListener('click', function(e) {
+        if (isTouch()) return;
+        const target = e.target;
+        if (target.tagName === 'IMG' && (target.closest('.item') || target.classList.contains('process-img'))) {
+            openModal(target);
         }
+    });
 
-        closeBtn.onclick = () => modal.style.display = "none";
-        modal.onclick = (e) => { if (e.target !== modalImg && e.target !== nextBtn && e.target !== prevBtn) modal.style.display = "none"; };
+    nextBtn.onclick = (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex + 1) % images.length;
+        updateModalImage();
+    }
 
-        document.addEventListener('keydown', (e) => {
-            if (modal.style.display === "flex") {
-                if (e.key === "ArrowRight") nextBtn.onclick(e);
-                if (e.key === "ArrowLeft") prevBtn.onclick(e);
-                if (e.key === "Escape") modal.style.display = "none";
-            }
-        });
+    prevBtn.onclick = (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        updateModalImage();
+    }
+
+    closeBtn.onclick = () => modal.style.display = "none";
+
+    modal.onclick = (e) => {
+        if (e.target !== modalImg && e.target !== nextBtn && e.target !== prevBtn) {
+            modal.style.display = "none";
+        }
+    };
+
+    document.addEventListener('keydown', (e) => {
+        if (modal.style.display === "flex") {
+            if (e.key === "ArrowRight") nextBtn.onclick(e);
+            if (e.key === "ArrowLeft") prevBtn.onclick(e);
+            if (e.key === "Escape") modal.style.display = "none";
+        }
+    });
     </script>
 </body>
 </html>
