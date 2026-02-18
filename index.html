@@ -415,11 +415,9 @@
         }
 
         .modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-            border-radius: 2px;
-            animation: zoomIn 0.3s ease;
+            width: 100%;       /* Растягиваем на всю ширину */
+            height: 100%;      /* И высоту */
+            object-fit: contain; /* Но сохраняем пропорции, чтобы не обрезать */
         }
 
         @keyframes zoomIn {
@@ -942,6 +940,29 @@
 
         let images = Array.from(document.querySelectorAll(".item img, .process-img"));
         let currentIndex = 0;
+       // Переменные для отслеживания двойного тапа
+       let lastTap = 0;
+
+       document.addEventListener('touchend', function (e) {
+           const currentTime = new Date().getTime();
+           const tapLength = currentTime - lastTap;
+
+           // Если интервал между нажатиями меньше 300мс — это двойной тап
+           if (tapLength < 300 && tapLength > 0) {
+               const target = e.target;
+
+               // Проверяем, что нажали на картинку в галерее или в процессе
+               if (target.tagName === 'IMG' && (target.closest('.item') || target.classList.contains('process-img'))) {
+                   e.preventDefault(); // Чтобы страница не зумилась стандартно
+
+                   modal.style.display = "flex";
+                   images = Array.from(document.querySelectorAll(".item img, .process-img"));
+                   currentIndex = images.indexOf(target);
+                   updateModalImage();
+               }
+           }
+           lastTap = currentTime;
+       });
 
         document.addEventListener('click', function(e) {
             const target = e.target;
