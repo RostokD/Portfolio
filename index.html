@@ -457,7 +457,7 @@
         .modal-prev { left: 30px; }
         .modal-next { right: 30px; }
 
-     /* =======================================================
+        /* =======================================================
            АДАПТИВНЫЕ ПРАВКИ (МОБИЛЬНЫЕ УСТРОЙСТВА)
            ======================================================= */
 
@@ -466,60 +466,59 @@
             .about-image { max-width: 400px; margin: 0 auto; }
         }
 
-        @media (max-width: 768px) {
-            /* 1. Шапка */
+     @media (max-width: 768px) {
+            /* 1. Навигация */
             nav ul { gap: 15px; }
             nav a { font-size: 0.75rem; }
-            .logo { font-size: 1rem; }
 
-            /* 2. Hero секция — собираем контент кучнее */
+            /* 2. Hero — УБИРАЕМ ДЫРУ ВНИЗУ */
             .hero {
                 padding: 0 5%;
-                height: 100vh;
                 display: flex;
-                align-items: flex-start; /* Прижимаем к верху */
+                align-items: flex-start;
+                height: 550px !important; /* Жестко ограничиваем высоту, чтобы не было пустоты */
+                min-height: auto !important;
+                overflow: visible !important;
             }
             .hero-content {
-                margin-top: 15vh !important; /* Отступ от шапки */
+                margin-top: 100px !important; /* Фиксированный отступ от шапки */
                 max-width: 100%;
-                z-index: 10;
             }
             .hero h1 {
-                font-size: clamp(1.8rem, 9vw, 2.5rem) !important;
+                font-size: 2.2rem !important;
                 margin-bottom: 10px;
             }
             .hero p {
                 font-size: 0.85rem !important;
                 margin-bottom: 20px;
-                line-height: 1.4;
-            }
-            .cta-button {
-                padding: 12px 30px !important;
-                font-size: 0.75rem;
             }
 
-            /* 3. Исправляем световой барьер и картинку */
-            .hero-visual img {
-                height: 45% !important; /* Уменьшаем картинку, чтобы текст не наползал */
-                opacity: 0.5;
-            }
-            .hero-light-bottom {
-                bottom: auto !important;
-                top: 55% !important; /* Линия СРАЗУ под картинку */
-                height: 100px;
-            }
-
-            /* 4. Убираем дыру между Hero и About */
+            /* 3. ОБО МНЕ — ПРИЖИМАЕМ ВПЛОТНУЮ */
             .about {
-                margin-top: -10vh !important; /* Подтягиваем секцию вверх */
-                padding: 40px 5%;
-                background-color: var(--bg-color);
+                margin-top: 0 !important; /* Убираем наезд */
+                padding: 20px 5% !important; /* Минимум отступа внутри */
+                border-top: none !important; /* Убираем лишнюю линию-разделитель */
             }
-            .about-container { gap: 20px; }
+
+            /* Световая линия — на мобилках лучше сделать её короче */
+            .hero-light-bottom {
+                bottom: 0 !important;
+                height: 10% !important;
+            }
+
+            /* 4. Галерея (оставляем рабочую версию) */
+            .gallery {
+                grid-template-columns: 1fr !important;
+                gap: 20px !important;
+            }
+            .item { width: 100% !important; height: auto !important; }
+            .item img { width: 100% !important; height: auto !important; }
+
+            /* Детали профиля в столбик */
             .about-details { grid-template-columns: 1fr; gap: 10px; }
         }
 
-        /* --- ЛАНДШАФТНЫЙ РЕЖИМ (Горизонтально) --- */
+        /* --- ЛАНДШАФТНЫЙ РЕЖИМ --- */
         @media (max-height: 480px) and (orientation: landscape) {
             .hero {
                 height: auto !important;
@@ -539,9 +538,9 @@
         <div class="logo"><a href="../">CREATIVE<span>3D</span></a></div>
         <nav>
             <ul>
-                <li><a href="#about-me">PROFILE</a></li>
-                <li><a href="#skills">SKILLS</a></li>
-                <li><a href="#portfolio">GALLERY</a></li>
+              <li><a href="/#about-me">PROFILE</a></li>
+              <li><a href="/#skills">SKILLS</a></li>
+              <li><a href="/#portfolio">GALLERY</a></li>
             </ul>
         </nav>
     </header>
