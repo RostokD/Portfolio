@@ -650,6 +650,53 @@
                 margin-top: 0 !important;
             }
         }
+
+        /* --- СТИЛИ ДЛЯ ЗАГЛУШКИ --- */
+        .maintenance-container {
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 10%;
+        }
+
+        .maintenance-content h1 {
+            font-family: 'Manrope', sans-serif;
+            font-size: clamp(2rem, 6vw, 4rem);
+            line-height: 1.1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .maintenance-content h1 span {
+            -webkit-text-stroke: 1px var(--text-main);
+            color: transparent;
+        }
+
+        .maintenance-content p {
+            color: var(--text-sec);
+            max-width: 500px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+        }
+
+        /* Анимация мигания для бейджа */
+        .maintenance-content .status-badge {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -731,7 +778,7 @@
 <section class="skills" id="skills">
     <h2 class="section-title">PROFESSIONAL SKILLS</h2>
     <div class="skills-grid">
-        <a href="env-design/index.html" class="skill-card-link">
+        <a href="under-development/index.html" class="skill-card-link">
             <div class="skill-card">
                 <h3>Environment Design</h3>
                 <p>Разработка локаций: от блокинга до сборки в Unreal Engine.</p>
@@ -747,7 +794,7 @@
                 <div class="card-more">enter →</div>
             </div>
         </a>
-        <a href="optimization/index.html" class="skill-card-link">
+        <<a href="under-development/index.html" class="skill-card-link">
             <div class="skill-card">
                 <h3>Optimization</h3>
                 <p>Ретопология и UV-развертка.</p>
@@ -1156,14 +1203,14 @@
     };
     // --- ЗАЩИТА ОТ КОПИРОВАНИЯ ---
     // Запрет правой кнопки мыши на картинках
-    document.addEventListener('contextmenu', function(e) {
+    document.addEventListener('contextmenu', function (e) {
         if (e.target.tagName === 'IMG') {
             e.preventDefault();
         }
     }, false);
 
     // Запрет перетаскивания картинок
-    document.addEventListener('dragstart', function(e) {
+    document.addEventListener('dragstart', function (e) {
         if (e.target.tagName === 'IMG') {
             e.preventDefault();
         }
