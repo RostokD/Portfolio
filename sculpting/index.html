@@ -1018,6 +1018,22 @@
             if (e.key === "Escape") modal.style.display = "none";
         }
     });
+    // --- ГЛОБАЛЬНАЯ ЗАЩИТА КАРТИНК (Галерея + Скиллы) ---
+    document.addEventListener('contextmenu', function(e) {
+        // Проверяем, что кликнули по картинке
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+            return false;
+        }
+    }, false);
+
+    document.addEventListener('dragstart', function(e) {
+        // Запрещаем перетаскивать картинки
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+            return false;
+        }
+    }, false);
 </script>
 </body>
 </html>
